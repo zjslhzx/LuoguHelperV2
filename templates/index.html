@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luogu Helper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260813">
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <!-- Code highlighter: dark + light themes (toggled by JS) -->
+    <link rel="stylesheet" id="hljsDark" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+    <link rel="stylesheet" id="hljsLight" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css" disabled>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <!-- KaTeX: LaTeX math rendering (bundled locally for offline use) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='katex/katex.min.css') }}">
+    <script src="{{ url_for('static', filename='katex/katex.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='katex/contrib/auto-render.min.js') }}"></script>
+    <!-- Chart.js for practice charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Apply saved theme before render to avoid FOUC -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("luogu_analyzer_theme");
+                if (!t) {
+                    t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                }
+                document.documentElement.setAttribute("data-theme", t);
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body>
+    <div class="app">
+        <!-- ===== Header ===== -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="header-left">
+                    <div>
+                        <h1 data-i18n="appTitle">Luogu Helper</h1>
+                        <p class="subtitle" data-i18n="appSubtitle">输入题号，自动获取题目与题解，AI 智能分析</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button type="button" id="langToggle" class="lang-toggle" title="切换语言 / Switch language">
+                        <span data-i18n="langToggle">EN</span>
+                    </button>
+                    <button type="button" id="themeToggle" class="theme-toggle" data-i18n-title="themeToggleTitle" data-i18n-aria="themeToggleAria">
+                        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                        </svg>
+                        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <a class="luogu-link" href="https://www.luogu.com.cn" target="_blank" rel="noopener" data-i18n="luoguLink">洛谷官网 ↗</a>
+                    <div id="userProfileArea" class="user-profile-area hidden">
+                        <img id="userAvatar" class="user-avatar" alt="" src="">
+                        <span id="userName" class="user-name" data-i18n-title="profileTitle"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button type="button" id="userSearchBtn" class="btn-secondary header-btn" data-i18n-aria="userSearchBtn" aria-label="找用户">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="4"></circle><path d="M4 20c0-3 3-5 7-5s7 2 7 5"></path></svg>
+                    <span data-i18n="userSearchBtn">找用户</span>
+                </button>
+                <button type="button" id="trainingBtn" class="btn-secondary header-btn" data-i18n-aria="trainingBtn" aria-label="训练计划">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path></svg>
+                    <span data-i18n="trainingBtn">训练计划</span>
+                </button>
+                <button type="button" id="checkinBtn" class="btn-secondary header-btn" data-i18n-aria="checkinBtn" aria-label="打卡">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path><path d="m9 15 2 2 4-4"></path></svg>
+                    <span data-i18n="checkinBtn">打卡</span>
+                </button>
+                <button type="button" id="contestReminderBtn" class="btn-secondary header-btn" data-i18n-aria="contestReminderBtn" aria-label="比赛提醒">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+                    <span data-i18n="contestReminderBtn">比赛提醒</span>
+                </button>
+                <button type="button" id="standingsBtn" class="btn-secondary header-btn" data-i18n-aria="standingsBtn" aria-label="比赛榜单">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+                    <span data-i18n="standingsBtn">比赛榜单</span>
+                </button>
+                <button type="button" id="recommendBtn" class="btn-secondary header-btn" data-i18n-aria="recommendBtn" aria-label="智能推荐">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.3 4.6L18.5 21 12 17l-6.5 4 1.8-6.9L2 9.5 9 9z"></path></svg>
+                    <span data-i18n="recommendBtn">智能推荐</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ===== Input Panel ===== -->
+        <section class="input-panel">
+            <!-- Search bar -->
+            <div class="search-row">
+                <div class="input-group search-group">
+                    <label for="searchInput" data-i18n="searchLabel">题库搜索</label>
+                    <div class="search-input-wrap">
+                        <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="按标题或关键词搜索洛谷题库（如：A+B Problem、背包）" autocomplete="off" spellcheck="false">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                </div>
+                <select id="ojSelect" class="oj-select" data-i18n-title="ojSource" title="题库来源" aria-label="题库来源">
+                    <option value="luogu" data-i18n="ojLuogu">洛谷</option>
+                    <option value="atcoder" data-i18n="ojAtcoder">AtCoder</option>
+                </select>
+                <button id="searchBtn" class="btn-secondary" data-i18n="searchBtn">搜索</button>
+            </div>
+            <div id="searchResults" class="search-results hidden"></div>
+            <div class="input-row" style="margin-top:16px;">
+                <div class="input-group input-problem">
+                    <label for="problemId" data-i18n="problemIdLabel">题号</label>
+                    <input type="text" id="problemId" data-i18n-placeholder="problemIdPlaceholder" placeholder="例如 P1000" autocomplete="off" spellcheck="false">
+                    <div class="input-example hidden" data-example-key="problemIdExample"></div>
+                </div>
+                <div class="input-group input-mode">
+                    <label data-i18n="modeLabel">分析模式</label>
+                    <div class="mode-toggle" id="modeToggle">
+                        <button type="button" class="mode-btn active" data-mode="ai" data-i18n="modeAI">AI 分析</button>
+                        <button type="button" class="mode-btn" data-mode="filter" data-i18n="modeFilter">自动筛选</button>
+                    </div>
+                </div>
+                <div class="input-group input-model" id="modelGroup">
+                    <label for="model" data-i18n="modelLabel">模型</label>
+                    <select id="model">
+                        <option value="deepseek-chat">deepseek-chat (V3)</option>
+                        <option value="deepseek-reasoner">deepseek-reasoner (R1)</option>
+                        <option value="glm-4">glm-4</option>
+                        <option value="glm-4-flash">glm-4-flash</option>
+                        <option value="glm-4.5-air">glm-4.5-air</option>
+                    </select>
+                </div>
+                <button id="analyzeBtn" class="btn-primary" data-i18n="analyzeBtn">开始分析</button>
+            </div>
+            <div class="input-row" style="margin-top:12px;">
+                <div class="input-group input-key">
+                    <label for="apiKey" data-i18n="apiKeyLabel">DeepSeek API Key（可选）</label>
+                    <div class="input-with-btn">
+                        <input type="password" id="apiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="留空则仅展示题解，不进行 AI 分析" autocomplete="off" spellcheck="false">
+                        <button id="saveApiKeyBtn" class="btn-save" data-i18n="saveBtn">校验并保存</button>
+                    </div>
+                    <span id="apiKeyStatus" class="save-status"></span>
+                    <div class="input-example hidden" data-example-key="apiKeyExample"></div>
+                </div>
+                <div class="input-group input-key">
+                    <label for="glmApiKey" data-i18n="glmApiKeyLabel">GLM API Key（可选）</label>
+                    <div class="input-with-btn">
+                        <input type="password" id="glmApiKey" data-i18n-placeholder="glmApiKeyPlaceholder" placeholder="选择 GLM 模型时使用" autocomplete="off" spellcheck="false">
+                        <button id="saveGlmApiKeyBtn" class="btn-save" data-i18n="saveBtn">校验并保存</button>
+                    </div>
+                    <span id="glmApiKeyStatus" class="save-status"></span>
+                    <div class="input-example hidden" data-example-key="glmApiKeyExample"></div>
+                </div>
+                <div class="input-group input-key">
+                    <label for="luoguCookie" data-i18n="cookieLabel">洛谷 Cookie（可选，查看题解需要）</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="luoguCookie" data-i18n-placeholder="cookiePlaceholder" placeholder='例如: __client_id=xxx; _uid=123' autocomplete="off" spellcheck="false">
+                        <button id="saveCookieBtn" class="btn-save" data-i18n="saveBtn">校验并保存</button>
+                    </div>
+                    <span id="cookieStatus" class="save-status"></span>
+                    <div class="input-example hidden" data-example-key="cookieExample"></div>
+                </div>
+                <div class="input-group input-key">
+                    <label for="vjudgeUsername" data-i18n="vjudgeUsernameLabel">Vjudge 用户名/邮箱（推荐，提交时自动登录，无需每次复制 Cookie）</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="vjudgeUsername" data-i18n-placeholder="vjudgeUsernamePlaceholder" placeholder="Vjudge 用户名 或 Email" autocomplete="off" spellcheck="false">
+                        <button id="saveVjudgeCredsBtn" class="btn-save" data-i18n="saveBtn">校验并保存</button>
+                    </div>
+                    <span id="vjudgeCredsStatus" class="save-status"></span>
+                    <div class="input-example hidden" data-example-key="vjudgeUsernameExample"></div>
+                </div>
+                <div class="input-group input-key">
+                    <label for="vjudgePassword" data-i18n="vjudgePasswordLabel">Vjudge 密码</label>
+                    <div class="input-with-btn">
+                        <input type="password" id="vjudgePassword" data-i18n-placeholder="vjudgePasswordPlaceholder" placeholder="Vjudge 密码" autocomplete="off" spellcheck="false">
+                    </div>
+                    <span id="vjudgePasswordStatus" class="save-status"></span>
+                    <div class="input-example hidden" data-example-key="vjudgePasswordExample"></div>
+                    <button id="clearVjudgeCredsBtn" class="btn-clear-link" type="button" data-i18n="clearVjudgeCredsLabel">忘记密码？清除已保存账号</button>
+                </div>
+                <button id="configCollapseBtn" class="config-collapse-btn" type="button" title="收起配置">
+                    <svg class="collapse-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+            </div>
+            <p class="input-hint" data-i18n="inputHint">
+                题目信息无需登录即可获取；查看题解需要填入洛谷 Cookie（登录洛谷后从浏览器开发者工具中复制）。
+                填入 API Key 将使用 DeepSeek AI 进行智能分析和总结。点击「校验并保存」可验证并记住配置，下次无需重新输入。
+            </p>
+        </section>
+
+        <!-- ===== Status Bar ===== -->
+        <div id="statusBar" class="status-bar hidden"></div>
+
+        <!-- ===== Opened Problems (multi-tab) ===== -->
+        <div id="openTabs" class="open-tabs hidden"></div>
+
+        <!-- ===== Tabs ===== -->
+        <nav class="tabs" id="tabs">
+            <button class="tab active" data-tab="problem" data-i18n="tabProblem">题目信息</button>
+            <button class="tab" data-tab="solutions" data-i18n="tabSolutions">题解列表</button>
+            <button class="tab" data-tab="analysis" data-i18n="tabAnalysis">AI 分析</button>
+            <button class="tab" data-tab="submit" data-i18n="tabSubmit">提交代码</button>
+        </nav>
+
+        <!-- ===== Tab Content ===== -->
+        <main class="tab-content">
+            <!-- Problem Info -->
+            <section id="tab-problem" class="tab-pane active">
+                <div id="problemContent" class="content-area">
+                    <div class="placeholder">
+                        <p data-i18n="placeholderProblem">请在上方输入洛谷题号并点击「开始分析」</p>
+                        <p class="placeholder-sub" data-i18n="placeholderProblemSub">支持 P/B/CF/SP/AT 等格式的题号</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solutions -->
+            <section id="tab-solutions" class="tab-pane">
+                <div id="solutionsContent" class="content-area">
+                    <div class="placeholder">
+                        <p data-i18n="placeholderSolutions">题解列表将在此显示</p>
+                        <p class="placeholder-sub" data-i18n="placeholderSolutionsSub">系统会自动筛选包含代码示例的高质量题解</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Analysis -->
+            <section id="tab-analysis" class="tab-pane">
+                <div class="analysis-split">
+                    <div id="analysisContent" class="content-area">
+                        <div class="placeholder">
+                            <p data-i18n="placeholderAnalysis">AI 分析结果将在此显示</p>
+                            <p class="placeholder-sub" data-i18n="placeholderAnalysisSub">填入 DeepSeek API Key 后将获得智能分析报告</p>
+                        </div>
+                    </div>
+                    <!-- Draggable divider between AI report and AI assistant -->
+                    <div class="analysis-divider" id="analysisDivider" data-i18n-title="analysisDividerTitle"></div>
+                    <!-- AI Assistant chat panel (right of analysis) -->
+                    <div class="assistant-panel" id="assistantPanel">
+                        <div class="assistant-header">
+                            <span class="assistant-title" data-i18n="assistantTitle">AI 助手</span>
+                            <label class="assistant-thinking-toggle" data-i18n-title="assistantThinkingTitle">
+                                <input type="checkbox" id="assistantThinking">
+                                <span data-i18n="assistantThinking">思考模式</span>
+                            </label>
+                            <button type="button" class="assistant-clear-btn" id="assistantClearBtn" data-i18n="assistantClear">清空</button>
+                        </div>
+                        <div class="assistant-context" id="assistantContext">
+                            <span data-i18n="assistantNoContext">可自由提问，或针对当前题目提问</span>
+                        </div>
+                        <div class="assistant-messages" id="assistantMessages"></div>
+                        <div class="assistant-input-bar">
+                            <textarea id="assistantInput" rows="1" data-i18n-placeholder="assistantPlaceholder" placeholder="输入问题，Enter 发送，Shift+Enter 换行"></textarea>
+                            <button type="button" class="assistant-send-btn" id="assistantSendBtn" data-i18n="assistantSend">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Submit Code -->
+            <section id="tab-submit" class="tab-pane">
+                <div id="submitContent" class="content-area">
+                    <div class="submit-panel">
+                        <div class="submit-header">
+                            <div class="submit-target">
+                                <span class="submit-label" data-i18n="submitTarget">提交至：</span>
+                                <span id="submitTargetPid" class="submit-pid" data-i18n="submitTargetEmpty">未选择题号</span>
+                            </div>
+                            <div class="submit-controls">
+                                <label for="langSelect" class="submit-label" data-i18n="langLabel">语言</label>
+                                <select id="langSelect">
+                                    <option value="0" data-i18n="autoDetect">自动语言检测</option>
+                                </select>
+                                <div class="submit-oj-toggle" id="submitOjToggle">
+                                    <button type="button" class="submit-oj-btn active" data-oj="luogu" data-i18n="ojLuogu">洛谷</button>
+                                    <button type="button" class="submit-oj-btn" data-oj="vjudge" data-i18n="ojVjudge">Vjudge</button>
+                                </div>
+                                <label class="o2-toggle">
+                                    <input type="checkbox" id="enableO2">
+                                    <span data-i18n="enableO2">开启 O2</span>
+                                </label>
+                                <label class="o2-toggle bracket-toggle" title="输入左括号时自动补全右括号">
+                                    <input type="checkbox" id="enableBracket" checked>
+                                    <span data-i18n="enableBracket">括号补全</span>
+                                </label>
+                                <label class="o2-toggle bracket-toggle" title="评测完成后发送 Windows 系统通知">
+                                    <input type="checkbox" id="enableNotify" checked>
+                                    <span data-i18n="enableNotify">系统通知</span>
+                                </label>
+                                <div class="tpl-wrap" id="tplWrap">
+                                    <button type="button" id="tplBtn" class="btn-ide-toggle btn-tpl" data-i18n="tplBtn">模板</button>
+                                    <div id="tplMenu" class="tpl-menu hidden" role="menu"></div>
+                                </div>
+                                <button type="button" id="ideModeBtn" class="btn-ide-toggle" data-i18n="ideModeBtn">在线IDE</button>
+                            </div>
+                        </div>
+                        <div class="code-editor-wrap">
+                            <pre class="code-editor-highlight" id="codeHighlight" aria-hidden="true"><code class="hljs"></code></pre>
+                            <textarea id="codeEditor" class="code-editor" data-i18n-placeholder="codePlaceholder" placeholder="在此输入你的代码..." spellcheck="false" wrap="off"></textarea>
+                            <button type="button" class="copy-btn code-copy-btn" id="copyCodeBtn" data-i18n-title="copyCodeTitle" title="复制代码">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="submit-footer">
+                            <span id="submitHint" class="submit-hint" data-i18n="submitHint">请先选择题号并填入洛谷 Cookie</span>
+                            <span id="draftStatus" class="draft-status"></span>
+                            <button id="saveDraftBtn" class="btn-secondary" data-i18n="saveDraftBtn">保存草稿</button>
+                            <button id="submitCodeBtn" class="btn-primary" disabled data-i18n="submitCodeBtn">提交代码</button>
+                        </div>
+                    </div>
+                    <div id="judgeResult" class="judge-result hidden"></div>
+                    <div id="submissionHistory" class="submission-history hidden"></div>
+
+                    <!-- ===== Online IDE split (hidden unless IDE mode) ===== -->
+                    <div id="ideSplit" class="ide-split hidden">
+                        <!-- Left: search / problem / solutions / analysis -->
+                        <div class="ide-left">
+                            <div class="ide-mini-tabs" id="ideMiniTabs">
+                                <button type="button" class="ide-mini-tab active" data-ide-tab="search" data-i18n="ideTabSearch">搜索</button>
+                                <button type="button" class="ide-mini-tab" data-ide-tab="problem" data-i18n="ideTabProblem">题目</button>
+                                <button type="button" class="ide-mini-tab" data-ide-tab="solutions" data-i18n="ideTabSolutions">题解</button>
+                                <button type="button" class="ide-mini-tab" data-ide-tab="analysis" data-i18n="ideTabAnalysis">分析</button>
+                            </div>
+                            <div class="ide-left-body">
+                                <div class="ide-slot-pane active" id="ideSearchSlot"></div>
+                                <div class="ide-slot-pane" id="ideProblemSlot"></div>
+                                <div class="ide-slot-pane" id="ideSolutionsSlot"></div>
+                                <div class="ide-slot-pane" id="ideAnalysisSlot"></div>
+                            </div>
+                        </div>
+                        <!-- Draggable divider to resize left/right panes -->
+                        <div id="ideDivider" class="ide-divider" title="拖拽调整宽度"></div>
+                        <!-- Right: editor header / editor / test panel / submit footer -->
+                        <div class="ide-right">
+                            <div id="ideEditorHeaderSlot"></div>
+                            <div id="ideEditorSlot"></div>
+                            <div class="ide-test-panel">
+                                <div class="ide-test-tabs">
+                                    <button type="button" class="ide-test-tab active" data-ide-test="single" data-i18n="ideTestSingle">单组运行</button>
+                                    <button type="button" class="ide-test-tab" data-ide-test="cases" data-i18n="ideTestCases">多组测试</button>
+                                    <button type="button" class="ide-test-tab" data-ide-test="duipai" data-i18n="ideTestDuipai">对拍</button>
+                                </div>
+                                <div class="ide-test-pane active" data-ide-test-pane="single">
+                                    <div class="ide-test-cols">
+                                        <div class="ide-test-col ide-test-input-wrap">
+                                            <div class="ide-test-col-header">
+                                                <span data-i18n="ideStdinLabel">输入数据</span>
+                                                <button type="button" id="ideRunBtn" class="btn-primary ide-run-btn" data-i18n="ideRunBtn">编译并运行</button>
+                                            </div>
+                                            <textarea id="ideStdin" class="ide-stdin" data-i18n-placeholder="ideStdinPlaceholder" placeholder="在此输入标准输入数据..." spellcheck="false" wrap="off"></textarea>
+                                        </div>
+                                        <div class="ide-test-col ide-test-output-wrap">
+                                            <div class="ide-test-col-header">
+                                                <span data-i18n="ideOutputLabel">运行结果</span>
+                                                <span id="ideRunMeta" class="ide-run-meta"></span>
+                                            </div>
+                                            <pre id="ideOutput" class="ide-output"></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ide-test-pane" data-ide-test-pane="cases">
+                                    <div class="ide-cases-header">
+                                        <span data-i18n="ideCasesHint">逐组填写输入与期望输出，点击运行批量评测</span>
+                                        <span class="ide-cases-actions">
+                                            <button type="button" id="ideCaseAddBtn" class="btn-secondary ide-sm-btn" data-i18n="ideCaseAdd">添加测试点</button>
+                                            <button type="button" id="ideCaseRunBtn" class="btn-primary ide-sm-btn" data-i18n="ideCaseRun">运行全部测试</button>
+                                        </span>
+                                    </div>
+                                    <div id="ideCaseList" class="ide-case-list"></div>
+                                    <div id="ideCaseResult" class="ide-case-result"></div>
+                                </div>
+                                <div class="ide-test-pane" data-ide-test-pane="duipai">
+                                    <div class="ide-duipai-hint" data-i18n="ideDuipaiHint">提供数据生成器与暴力/标准程序，自动随机生成多组数据并对比你的程序输出。</div>
+                                    <div class="ide-duipai-row">
+                                        <label class="ide-duipai-label" data-i18n="ideDuipaiGen">数据生成器</label>
+                                        <textarea id="ideGenCode" class="ide-duipai-code" data-i18n-placeholder="ideDuipaiGenPlaceholder" placeholder="生成器：每次运行输出一组随机输入数据到 stdout（例如随机生成两个数）" spellcheck="false" wrap="off"></textarea>
+                                    </div>
+                                    <div class="ide-duipai-row">
+                                        <label class="ide-duipai-label" data-i18n="ideDuipaiBrute">暴力/标准程序</label>
+                                        <textarea id="ideBruteCode" class="ide-duipai-code" data-i18n-placeholder="ideDuipaiBrutePlaceholder" placeholder="暴力程序：读取 stdin，输出正确结果" spellcheck="false" wrap="off"></textarea>
+                                    </div>
+                                    <div class="ide-duipai-row ide-duipai-row-inline">
+                                        <label class="ide-duipai-label" data-i18n="ideDuipaiIter">对拍次数</label>
+                                        <input type="number" id="ideDuipaiIter" class="ide-duipai-iter" value="20" min="1" max="200">
+                                        <button type="button" id="ideDuipaiRunBtn" class="btn-primary ide-sm-btn" data-i18n="ideDuipaiRun">开始对拍</button>
+                                    </div>
+                                    <pre id="ideDuipaiOutput" class="ide-output ide-duipai-output"></pre>
+                                </div>
+                            </div>
+                            <div id="ideSubmitFooterSlot"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ===== Captcha Modal ===== -->
+        <div id="captchaModal" class="captcha-modal hidden">
+            <div class="captcha-dialog">
+                <div class="captcha-title" data-i18n="captchaTitle">请输入验证码</div>
+                <div class="captcha-body">
+                    <img id="captchaImage" class="captcha-image" alt="验证码" data-i18n="captchaAlt" src="">
+                    <button id="refreshCaptchaBtn" class="btn-refresh-captcha" data-i18n-title="captchaRefreshTitle" title="刷新验证码" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6"></path>
+                            <path d="M1 20v-6h6"></path>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+                <input type="text" id="captchaInput" class="captcha-input" data-i18n-placeholder="captchaPlaceholder" placeholder="输入图中验证码" autocomplete="off" spellcheck="false">
+                <div id="captchaError" class="captcha-error hidden"></div>
+                <div id="captchaGiveUpBox" class="captcha-giveup hidden">
+                    <div id="captchaGiveUpText" data-i18n="captchaGiveUp">多次验证失败（可能是交互式图形验证码），请直接在浏览器中完成提交</div>
+                    <button id="captchaOpenLuoguBtn" class="btn-secondary" type="button" data-i18n="captchaOpenLuogu">在洛谷中打开并手动提交</button>
+                </div>
+                <div class="captcha-actions">
+                    <button id="cancelCaptchaBtn" class="btn-secondary" type="button" data-i18n="captchaCancel">取消</button>
+                    <button id="confirmCaptchaBtn" class="btn-primary" type="button" data-i18n="captchaConfirm">确认并提交</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Manual Submit Guide Modal ===== -->
+        <div id="manualSubmitModal" class="manual-submit-modal hidden">
+            <div class="manual-submit-dialog">
+                <div class="manual-submit-title" data-i18n="manualSubmitTitle">洛谷需要交互式人机验证</div>
+                <div class="manual-submit-text" data-i18n="manualSubmitText">洛谷提交需要交互式点击验证码（滑块/点击字符），桌面应用无法自动完成。请复制代码，在浏览器中打开洛谷并手动提交。</div>
+                <div id="manualCopiedTip" class="manual-copied-tip hidden" data-i18n="copied">代码已复制，可在洛谷编辑器中粘贴</div>
+                <div class="manual-submit-actions">
+                    <button id="manualCopyCodeBtn" class="btn-secondary" type="button" data-i18n="copyCode">复制代码</button>
+                    <button id="manualOpenLuoguBtn" class="btn-primary" type="button" data-i18n="openLuoguSubmit">在洛谷中打开并手动提交</button>
+                </div>
+                <div class="manual-submit-secondary">
+                    <button id="manualDoneBtn" class="btn-secondary" type="button" data-i18n="alreadySubmitted">我已提交，查看评测</button>
+                    <button id="manualCancelBtn" class="btn-secondary" type="button" data-i18n="cancel">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Loading Overlay ===== -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p id="loadingText" data-i18n="loadingDefault">正在获取数据...</p>
+        </div>
+
+        <!-- ===== Submission Code View Modal ===== -->
+        <div id="submissionCodeModal" class="submission-code-modal hidden">
+            <div class="submission-code-dialog">
+                <div class="submission-code-header">
+                    <div>
+                        <h3 id="submissionCodeTitle"></h3>
+                        <p id="submissionCodeMeta" class="submission-code-meta"></p>
+                    </div>
+                    <div class="submission-code-header-actions">
+                        <button type="button" class="btn-secondary submission-export-btn hidden" id="submissionExportBtn">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+                            <span data-i18n="diffExport">导出代码</span>
+                        </button>
+                        <button type="button" class="modal-close-btn" id="submissionCodeCloseBtn" title="×">&times;</button>
+                    </div>
+                </div>
+                <div id="submissionTestCases" class="submission-testcases hidden"></div>
+                <div class="submission-code-body">
+                    <pre class="submission-code-pre"><code id="submissionCode" class="hljs"></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Training Plans Modal ===== -->
+        <div id="trainingModal" class="training-modal hidden">
+            <div class="training-dialog">
+                <div class="training-header">
+                    <div>
+                        <h3 id="trainingTitle" data-i18n="trainingTitle">洛谷官方训练计划</h3>
+                        <p id="trainingSubtitle" class="training-subtitle" data-i18n="trainingSubtitle">按学习路线刷题，点击题单查看题目</p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="trainingCloseBtn" title="×">&times;</button>
+                </div>
+                <div id="trainingBody" class="training-body">
+                    <div id="trainingLoading" class="profile-loading">
+                        <div class="spinner"></div>
+                        <p data-i18n="trainingLoading">正在加载训练计划...</p>
+                    </div>
+                    <div id="trainingList" class="training-list hidden"></div>
+                    <div id="trainingDetail" class="training-detail hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Collect to Collection Modal ===== -->
+        <div id="collectModal" class="collect-modal hidden">
+            <div class="collect-dialog">
+                <div class="collect-header">
+                    <h3 id="collectTitle"></h3>
+                    <button type="button" class="modal-close-btn" id="collectCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="collect-body">
+                    <div id="collectList" class="collect-list"></div>
+                    <div class="collect-new">
+                        <input type="text" id="collectNewName" data-i18n-placeholder="collectNewPlaceholder" placeholder="新建题单名称..." autocomplete="off">
+                        <button type="button" id="collectCreateBtn" class="btn-primary" data-i18n="collectCreate">新建题单</button>
+                    </div>
+                    <div id="collectError" class="collect-error hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Uncollect Confirm Modal ===== -->
+        <div id="uncollectModal" class="collect-modal hidden">
+            <div class="collect-dialog">
+                <div class="collect-header">
+                    <h3 id="uncollectTitle"></h3>
+                    <button type="button" class="modal-close-btn" id="uncollectCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="collect-body">
+                    <p id="uncollectText" class="collect-confirm-text"></p>
+                    <div class="collect-actions">
+                        <button type="button" class="btn-secondary" id="uncollectCancelBtn" data-i18n="captchaCancel">取消</button>
+                        <button type="button" class="btn-danger" id="uncollectConfirmBtn" data-i18n="uncollectConfirm">确认取消收藏</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== User Search Modal ===== -->
+        <div id="userSearchModal" class="training-modal hidden">
+            <div class="training-dialog user-search-dialog">
+                <div class="training-header">
+                    <div>
+                        <h3 data-i18n="userSearchTitle">搜索洛谷用户</h3>
+                        <p class="training-subtitle" data-i18n="userSearchSubtitle">按用户名或 UID 查找，点击结果查看 TA 的个人主页</p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="userSearchCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="user-search-input-row">
+                    <input type="text" id="userSearchInput" data-i18n-placeholder="userSearchPlaceholder" placeholder="输入用户名或UID（如：zhongjisailuo）" autocomplete="off" spellcheck="false">
+                    <button type="button" id="userSearchGoBtn" class="btn-primary" data-i18n="userSearchAction">搜索</button>
+                </div>
+                <div id="userSearchResults" class="user-search-results">
+                    <div class="placeholder"><p data-i18n="userSearchHint">输入用户名或 UID 开始搜索</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Profile Modal ===== -->
+        <div id="profileModal" class="profile-modal hidden">
+            <div class="profile-dialog">
+                <div class="profile-header">
+                    <div id="profileBanner" class="profile-banner"></div>
+                    <div class="profile-user-info">
+                        <img id="profileAvatar" class="profile-avatar" alt="" src="">
+                        <div class="profile-user-text">
+                            <h3 id="profileName"></h3>
+                            <p id="profileMeta" class="profile-meta"></p>
+                            <div id="profileInfo" class="profile-info"></div>
+                            <div class="profile-action-row">
+                                <button id="profileBlogBtn" class="btn-secondary" style="padding:4px 12px;font-size:13px;margin-top:8px;" data-i18n="blogBtn">博客</button>
+                                <a id="profileHomeLink" class="btn-secondary profile-home-link hidden" href="#" target="_blank" rel="noopener" style="padding:4px 12px;font-size:13px;margin-top:8px;text-decoration:none;display:inline-flex;align-items:center;" data-i18n="userOpenHome">查看洛谷主页</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="profileCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="profile-body">
+                    <div id="profileLoading" class="profile-loading">
+                        <div class="spinner"></div>
+                        <p data-i18n="profileLoading">正在加载练习数据...</p>
+                    </div>
+                    <div id="profileContent" class="profile-content hidden">
+                        <div class="profile-tabs">
+                            <button type="button" class="profile-tab active" data-profile-tab="overview" data-i18n="profileTabOverview">做题概览</button>
+                            <button type="button" class="profile-tab" data-profile-tab="trends" data-i18n="profileTabTrends">做题趋势</button>
+                            <button type="button" class="profile-tab" data-profile-tab="tags" data-i18n="profileTabTags">标签分布</button>
+                            <button type="button" class="profile-tab" data-profile-tab="recent" data-i18n="profileTabRecent">提交记录</button>
+                            <button type="button" class="profile-tab" data-profile-tab="collections" data-i18n="profileTabCollections">个人题单</button>
+                            <button type="button" class="profile-tab" data-profile-tab="stats" data-i18n="profileTabStats">刷题统计</button>
+                            <button type="button" class="profile-tab" data-profile-tab="wrongbook" data-i18n="profileTabWrongBook">错题本</button>
+                        </div>
+                        <div class="profile-tab-panel active" data-profile-panel="overview">
+                        <div class="profile-summary">
+                            <div class="summary-card passed">
+                                <span class="summary-num" id="summaryPassed">0</span>
+                                <span class="summary-label" data-i18n="profilePassed">已通过</span>
+                            </div>
+                            <div class="summary-card attempted">
+                                <span class="summary-num" id="summaryAttempted">0</span>
+                                <span class="summary-label" data-i18n="profileAttempted">尝试未通过</span>
+                            </div>
+                            <div class="summary-card total">
+                                <span class="summary-num" id="summaryTotal">0</span>
+                                <span class="summary-label" data-i18n="profileTotalSubmit">总提交题数</span>
+                            </div>
+                            <div class="summary-card rate">
+                                <span class="summary-num" id="summaryRate">--</span>
+                                <span class="summary-label" data-i18n="profileRate">通过率</span>
+                            </div>
+                        </div>
+                        <div class="profile-grid-2">
+                            <div class="profile-grid-item">
+                                <h4 data-i18n="profileDifficultyTitle">各难度做题情况</h4>
+                                <table class="profile-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-i18n="profileDifficulty">难度</th>
+                                            <th data-i18n="profilePassedCol">通过</th>
+                                            <th data-i18n="profileAttemptedCol">尝试</th>
+                                            <th data-i18n="profileRate">通过率</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profileTableBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="profile-grid-item">
+                                <h4 data-i18n="profileChartTitle">难度做题折线图</h4>
+                                <div class="profile-chart-wrap">
+                                    <canvas id="profileChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-grid-2">
+                            <div class="profile-grid-item">
+                                <h4 data-i18n="profileTypeTitle">题库类型分布</h4>
+                                <table class="profile-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-i18n="profileTypeCol">类型</th>
+                                            <th data-i18n="profileTypeCount">题数</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profileTypeBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="profile-grid-item">
+                                <h4 data-i18n="profileTypeChartTitle">类型分布图</h4>
+                                <div class="profile-chart-wrap type-chart">
+                                    <canvas id="profileTypeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-tab-panel" data-profile-panel="stats">
+                        <div class="stats-header">
+                            <h3 data-i18n="heatmapTitle">刷题统计</h3>
+                            <div class="stats-tabs">
+                                <button type="button" class="stats-tab active" data-stats-tab="heatmap" data-i18n="statsTabHeatmap">热力图</button>
+                                <button type="button" class="stats-tab" data-stats-tab="advanced" data-i18n="statsTabAdvanced">进阶统计</button>
+                            </div>
+                        </div>
+                        <div class="stats-body">
+                            <div id="statsHeatmapView">
+                                <div class="stats-summary" id="statsSummary"></div>
+                                <div class="stats-heatmap-wrap" id="statsHeatmap"></div>
+                                <div class="stats-legend"><span class="hm-legend" id="heatmapLegend"></span><span data-i18n="heatmapLegend">少 → 多</span></div>
+                            </div>
+                            <div id="statsAdvancedView" class="hidden">
+                                <div class="stats-summary" id="advStatsSummary"></div>
+                                <div class="adv-stats-grid">
+                                    <div class="adv-stats-card">
+                                        <div class="adv-stats-card-title" data-i18n="advStatsStatusTitle">评测状态分布</div>
+                                        <div class="adv-stats-card-content">
+                                            <canvas id="advStatusChart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="adv-stats-card">
+                                        <div class="adv-stats-card-title" data-i18n="advStatsLangTitle">语言分布</div>
+                                        <div class="adv-stats-card-content">
+                                            <canvas id="advLangChart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="adv-stats-card">
+                                        <div class="adv-stats-card-title" data-i18n="advStatsDayTitle">每日趋势</div>
+                                        <div class="adv-stats-card-content">
+                                            <canvas id="advDayChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="adv-problem-list">
+                                    <h4 data-i18n="advStatsProblemTitle">题目排名</h4>
+                                    <div id="advProblemList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-tab-panel" data-profile-panel="wrongbook">
+                        <div class="wrong-book-header">
+                            <div>
+                                <h3 data-i18n="wrongBookTitle">错题本</h3>
+                                <p class="wrong-book-subtitle" data-i18n="wrongBookSubtitle">最近一次提交未通过的题目</p>
+                            </div>
+                        </div>
+                        <div class="wrong-book-body" id="wrongBookBody">
+                            <div class="placeholder"><p data-i18n="wrongBookLoading">正在加载错题...</p></div>
+                        </div>
+                    </div>
+                        <div class="profile-tab-panel" data-profile-panel="trends">
+                            <div class="profile-grid-2">
+                                <div class="profile-grid-item">
+                                    <h4 data-i18n="profileTrendTitle">近 180 天做题趋势</h4>
+                                    <div class="profile-chart-wrap">
+                                        <div class="section-spinner"><div class="spinner"></div></div>
+                                        <canvas id="profileTrendChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="profile-grid-item">
+                                    <h4 data-i18n="profileWeekTitle">近 7 天活跃度</h4>
+                                    <div class="profile-chart-wrap week-chart">
+                                        <div class="section-spinner"><div class="spinner"></div></div>
+                                        <canvas id="profileWeekChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-tab-panel" data-profile-panel="tags">
+                            <h4 data-i18n="profileTagTitle">近期做题标签分布</h4>
+                            <div class="profile-tag-stats">
+                                <div class="profile-tag-list" id="profileTagBody"><div class="section-spinner"><div class="spinner"></div></div></div>
+                                <div class="profile-chart-wrap type-chart">
+                                    <div class="section-spinner"><div class="spinner"></div></div>
+                                    <canvas id="profileTagChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-tab-panel" data-profile-panel="recent">
+                            <h4 data-i18n="profileRecentTitle">最近提交记录</h4>
+                            <table class="profile-table recent-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="profileStatus">状态</th>
+                                        <th data-i18n="profileProblem">题目</th>
+                                        <th data-i18n="profileScore">分数</th>
+                                        <th data-i18n="profileTimeCol">用时</th>
+                                        <th data-i18n="profileMemoryCol">内存</th>
+                                        <th data-i18n="profileSubmitTimeCol">提交时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentBody"><tr><td colspan="6"><div class="section-spinner"><div class="spinner"></div></div></td></tr></tbody>
+                            </table>
+                        </div>
+                        <div class="profile-tab-panel" data-profile-panel="collections">
+                            <h4 id="profileCollectionsTitle" data-i18n="myCollections">个人题单</h4>
+                            <div id="profileCollections" class="profile-collections"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Toast Notifications ===== -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- ===== Stats (Heatmap) Modal - removed as integrated into profile modal ===== -->
+
+        <!-- ===== Contest Standings Modal (比赛榜单) ===== -->
+        <div id="standingsModal" class="standings-modal hidden">
+            <div class="standings-dialog">
+                <div class="standings-header">
+                    <div>
+                        <h3 data-i18n="standingsTitle">比赛榜单</h3>
+                        <p class="standings-subtitle" data-i18n="standingsSubtitle">输入比赛 ID 查看排行榜</p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="standingsCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="standings-body">
+                    <div class="standings-controls">
+                        <input type="text" id="standingsInput" data-i18n-placeholder="standingsPlaceholder" placeholder="比赛 ID（如 327096）" autocomplete="off" spellcheck="false">
+                        <button type="button" class="btn-primary" id="standingsGoBtn" data-i18n="standingsGo">查看榜单</button>
+                    </div>
+                    <div id="standingsContent" class="standings-content">
+                        <div class="placeholder"><p data-i18n="standingsHint">输入比赛 ID 查看实时排行榜</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Wrong Book Modal (错题本) ===== -->
+        <div id="wrongBookModal" class="wrong-book-modal hidden">
+            <div class="wrong-book-dialog">
+                <div class="wrong-book-header">
+                    <div>
+                        <h3 data-i18n="wrongBookTitle">错题本</h3>
+                        <p class="wrong-book-subtitle" data-i18n="wrongBookSubtitle">最近一次提交未通过的题目</p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="wrongBookCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="wrong-book-body" id="wrongBookBody">
+                    <div class="placeholder"><p data-i18n="wrongBookLoading">正在加载错题...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Smart Recommend Modal (智能推荐) ===== -->
+        <div id="recommendModal" class="recommend-modal hidden">
+            <div class="recommend-dialog">
+                <div class="recommend-header">
+                    <div>
+                        <h3 data-i18n="recommendTitle">智能推荐</h3>
+                        <p class="recommend-subtitle" data-i18n="recommendSubtitle">根据你的做题记录推荐未攻克题目</p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="recommendCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="recommend-body" id="recommendBody">
+                    <div class="placeholder"><p data-i18n="recommendLoading">正在为你挑选题目...</p></div>
+                </div>
+                <div class="recommend-footer">
+                    <button type="button" class="btn-secondary" id="recommendRefreshBtn" data-i18n="recommendRefresh">换一道</button>
+                    <button type="button" class="btn-primary" id="recommendGoBtn" data-i18n="recommendGo">去作答</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Version Diff Modal (版本对比) ===== -->
+        <div id="diffModal" class="diff-modal hidden">
+            <div class="diff-dialog">
+                <div class="diff-header">
+                    <div>
+                        <h3 data-i18n="diffTitle">版本对比</h3>
+                        <p class="diff-subtitle" id="diffSubtitle"></p>
+                    </div>
+                    <button type="button" class="modal-close-btn" id="diffCloseBtn" title="×">&times;</button>
+                </div>
+                <div class="diff-body">
+                    <pre class="diff-pre"><code id="diffContent" class="hljs"></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Disclaimer Modal (免责声明) ===== -->
+        <div id="disclaimerModal" class="disclaimer-modal hidden">
+            <div class="disclaimer-dialog">
+                <div class="disclaimer-header">
+                    <h3 data-i18n="disclaimerTitle">免责声明</h3>
+                </div>
+                <div class="disclaimer-body" id="disclaimerBody"></div>
+                <div class="disclaimer-footer">
+                    <label class="disclaimer-agree">
+                        <input type="checkbox" id="disclaimerCheck">
+                        <span data-i18n="disclaimerAgree">我认真阅读并同意免责声明</span>
+                    </label>
+                    <button type="button" class="btn-primary" id="disclaimerConfirmBtn" disabled data-i18n="disclaimerConfirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p class="footer-line" data-i18n="footerCopyright">© 2026 胡钊翔</p>
+        <p class="footer-disclaimer" data-i18n="footerDisclaimer">本工具仅供个人学习交流使用；题目与评测数据来源于洛谷（luogu.com.cn）公开接口，版权归洛谷及原出题人所有。</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='i18n.js') }}"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
