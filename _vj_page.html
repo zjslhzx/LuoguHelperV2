@@ -1,0 +1,400 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  (function () {
+    try {
+      const storedTheme = localStorage.getItem('theme') || 'auto';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const effectiveTheme = storedTheme === 'auto'
+          ? (prefersDark ? 'dark' : 'light')
+          : storedTheme;
+      document.documentElement.setAttribute('data-bs-theme', effectiveTheme);
+      document.documentElement.style.setProperty('color-scheme', effectiveTheme);
+    } catch (e) {
+    }
+  })();
+</script>
+
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-374JLX1715"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-374JLX1715', {
+      
+        'user_id': 'huzhaoxiang'
+      
+    });
+  </script>
+
+
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9098591903020457" crossorigin="anonymous"></script>
+
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="keywords" content="Online Judge, vjudge, OJ, Virtual Judge, ICPC, OnlineJudge"/>
+<meta name="robots" content="index, follow"/>
+
+    <title>A+B Problem - 洛谷 P1001 - Virtual Judge</title>
+
+    <meta property="og:url" content="https://vjudge.net/problem/洛谷-P1001"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="A+B Problem - Virtual Judge"/>
+    <meta property="og:description"
+          content="Contest [A+B Problem] in Virtual Judge"/>
+<script defer src="/static/bundle/044edcc7261708529ee7.js"></script><script defer src="/static/bundle/b2ca08ee2e540fb2f67f.js"></script><script defer src="/static/bundle/e8e8cb032750b2340dfa.js"></script><script defer src="/static/bundle/e172dabddc691082cd06.js"></script><script defer src="/static/bundle/51dbdc8c0bfac0946636.js"></script><script defer src="/static/bundle/d1e25565f07107bfb007.js"></script><script defer src="/static/bundle/2c09ce8bf02f69bc0aed.js"></script><script defer src="/static/bundle/bb189e7f309a17b4ef0e.js"></script><script defer src="/static/bundle/d010bb8d7368b132d7e1.js"></script><script defer src="/static/bundle/cb6fb126eab6a44229b3.js"></script><script defer src="/static/bundle/0b97c093e2859bc5ca8c.js"></script><script defer src="/static/bundle/1ab4f2a25ddef0442d12.js"></script><script defer src="/static/bundle/cf4aeaee22c19337768b.js"></script><script defer src="/static/bundle/eed69321eb78498ec83e.js"></script><link href="/static/bundle/65cb89bf913dbbfc38d5.css" rel="stylesheet"><link href="/static/bundle/49c9eb8f0e19e00686a8.css" rel="stylesheet"><link href="/static/bundle/75753e85ec31bc1e076a.css" rel="stylesheet"><link href="/static/bundle/df8e02b21dd8f60cfe0d.css" rel="stylesheet"><link href="/static/bundle/6f772c9e09a568324190.css" rel="stylesheet"></head>
+
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark prod" id="top-nav">
+    <button class="navbar-toggler d-sm-none" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <a class="navbar-brand" href="/">
+            <img src="/static/bundle/11b24ab2156955d8f3fa.ico" height="30"/>
+            <span data-i18n="top.nav.home"></span>
+        </a>
+        <ul class="navbar-nav top-nav-primary">
+            <li class="nav-item" id="nav-problem">
+                <a class="nav-link" href="/problem" data-i18n="top.nav.problem"></a>
+            </li>
+            <li class="nav-item" id="nav-status">
+                <a class="nav-link" href="/status" data-i18n="top.nav.status"></a>
+            </li>
+            <li class="nav-item" id="nav-contest">
+                <a class="nav-link" href="/contest" data-i18n="top.nav.contest"></a>
+            </li>
+            <li class="nav-item" id="nav-workbook">
+                <a class="nav-link" href="/workbook" data-i18n="top.nav.workbook"></a>
+            </li>
+            <li class="nav-item" id="nav-user">
+                <a class="nav-link" href="/user" data-i18n="top.nav.user"></a>
+            </li>
+            <li class="nav-item" id="nav-group">
+                <a class="nav-link" href="/group" data-i18n="top.nav.group"></a>
+            </li>
+            <li class="nav-item" id="nav-comment">
+                <a class="nav-link" href="/comment" data-i18n="top.nav.forum"></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="helpDropdown" data-bs-toggle="dropdown" data-i18n="top.nav.help"></a>
+                <div class="dropdown-menu dropdown-menu-start">
+                    <a class="dropdown-item" href="/article/2771">
+                        <i class="fa fa-question-circle-o"></i>
+                        <span data-i18n="top.nav.faq"></span>
+                    </a>
+                    <a class="dropdown-item" href="/article/97">
+                        <i class="fa fa-bug"></i>
+                        <span data-i18n="top.nav.bf"></span>
+                    </a>
+                    <a class="dropdown-item" href="/article/96">
+                        <i class="fa fa-lightbulb-o"></i>
+                        <span data-i18n="top.nav.suggestions"></span>
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0)" id="contact-us">
+                        <i class="fa fa-headphones"></i>
+                        <span data-i18n="top.nav.contact"></span>
+                    </a>
+                </div>
+            </li>
+            
+        </ul>
+        <ul class="navbar-nav top-nav-secondary ms-sm-auto">
+            <li class="nav-item top-nav-theme-item">
+                <a class="nav-link" href="javascript:void(0)" id="switchTheme"></a>
+            </li>
+            <li class="nav-item dropdown top-nav-locale-item">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="switchLocale" data-bs-toggle="dropdown" data-i18n="top.nav.locale"></a>
+                <div class="dropdown-menu dropdown-menu-end switch-locale-dropdown"></div>
+            </li>
+            
+                
+                    <li class="nav-item dropdown top-nav-user-item">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userNameDropdown" data-bs-toggle="dropdown">huzhaoxiang</a>
+                        <div class="dropdown-menu dropdown-menu-end user-dropdown">
+                            <a class="dropdown-item" href="/user/huzhaoxiang" data-i18n="top.nav.profile"></a>
+                            <a class="dropdown-item" href="/user/remoteAccounts?oj=CodeForces" data-i18n="top.nav.manage_accounts"></a>
+                            <a class="dropdown-item" href="/team/mine" data-i18n="team.mine"></a>
+                            <a class="dropdown-item message" href="/message" data-i18n="top.nav.message"></a>
+                        </div>
+                    </li>
+                    <li class="nav-item top-nav-logout-item">
+                        <a class="nav-link logout" href="javascript:void(0)" data-i18n="top.nav.logout"></a>
+                    </li>
+                
+                
+            
+        </ul>
+    </div>
+</nav>
+<div id="page-panel-toggle-slot"></div>
+
+
+<div class="page-panel-toggle-host d-none">
+    <button type="button"
+            class="btn btn-outline-light page-panel-toggle problem-panels-toggle d-none"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#prob-left-panel"
+            aria-controls="prob-left-panel">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+</div>
+
+<div class="container-md">
+    <div class="row fixed-left-panel-layout">
+        <div class="offcanvas-md offcanvas-start problem-side-panel-column fixed-left-panel"
+             id="prob-left-panel"
+             tabindex="-1"
+             aria-labelledby="problem-panels-title">
+            <div class="offcanvas-header d-md-none">
+                <h5 class="offcanvas-title" id="problem-panels-title" data-i18n="button.panels"></h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        data-bs-target="#prob-left-panel"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body problem-side-panel-body">
+            <div class="alert alert-danger problem-side-panel-alert" role="alert" id="prob-alert" style="display: none"></div>
+
+            <div id="prob-operation" class="problem-side-panel-section">
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn" id="btn-submit" data-bs-toggle="tooltip"></button>
+                    </div>
+                </div>
+
+                
+
+                <div class="row">
+                    <div class="col-6">
+                        <a href="/status#un=&OJId=洛谷&probNum=P1001&res=all&orderBy=run_id&language="
+                           target="_blank"
+                           class="btn btn-secondary"
+                           id="btn-problem-status">
+                            <i class="fa fa-list"></i>
+                            <span data-i18n="status._"></span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary" id="btn-leader-board">
+                            <i class='fa fa-list-ol'></i>
+                            <span data-i18n="problem.view.leaderboard"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary" id="btn-solutions">
+                            <span class="solution-count"></span>
+                            <span data-i18n="problem.view.solutions"></span>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary" id="btn-used-in-contests">
+                            <i class="fa fa-trophy"></i>
+                            <span data-i18n="problem.view.used_in_contests.button"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <a href="javascript:void(0)" data-bs-toggle="tooltip" class="recrawl btn btn-secondary">
+                            <i class='fa fa-refresh'></i>
+                            <span data-i18n="problem.view.recrawl"></span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="javascript:void(0)" class="gpt_translate btn btn-secondary" data-i18n-title="problem.view.translation_tip">
+                            <img src="/static/bundle/21463976b30d84e25348.svg" style="fill: blue; height: 14px; margin-bottom: 3px;"/>
+                            <span data-i18n="problem.view.translation"></span>
+                        </a>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <div id="prob-properties" class="problem-side-panel-section">
+                <dl class="card row"></dl>
+            </div>
+
+            <div id="prob-statistics" class="problem-side-panel-section">
+                <dl class="card row"></dl>
+            </div>
+
+            <div id="prob-my-sols" class="problem-side-panel-section"></div>
+
+            <div id="prob-descriptions" class="problem-side-panel-section">
+                <div id="prob-descs-toolbar"></div>
+                <ul class="list-group" id="prob-descs"></ul>
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-9098591903020457"
+                     data-ad-slot="9316078395"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                  (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            </div>
+
+        </div>
+
+        <div class="fixed-main-panel" id="prob-right-panel">
+            <div class="row">
+                <div id="prob-title">
+                    <h2><i id="btn-fav"></i> A+B Problem</h2>
+                    <span id="problem-visibility-badge"
+                          class="badge problem-title-badge problem-title-badge-private d-none"
+                          data-i18n="problem.view.title_badges.private"></span>
+                    <span id="problem-owner-badge"
+                          class="badge problem-title-badge problem-title-badge-owner d-none"
+                          data-i18n="problem.view.title_badges.owner"></span>
+                    <span class="origin">
+                        <a href="/problem/洛谷-P1001/origin"
+                           target="_blank">
+                            洛谷 - P1001
+                            <i class='fa fa-external-link'></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <iframe id="frame-description"
+                        width="100%"
+                        height="2048px"
+                        frameborder="0"
+                        scrolling="no">
+                </iframe>
+            </div>
+
+            <div id="problem_discuss" class="row"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<textarea style="display: none" name="dataJson">{"isProblemOwner":false,"prob":"P1001","visibility":"PUBLIC","canManageProblem":false,"accepted":false,"isFav":false,"solutionCount":14,"hasStatementAccess":true,"oj":"洛谷","crawling":false,"attempted":false,"problemId":4026406,"descBriefs":[{"key":437184320369947,"updateDate":"2026-08-13","version":1786598215000,"author":"System","authorKey":"main:zh-CN","type":"main","statementKey":"zh-CN","lang":"zh","langDisplay":"中文","official":true,"mainOfficial":true,"publicVisible":true,"remarks":"Initialization."},{"key":437168008070260,"updateDate":"2026-08-13","version":1786598215000,"author":"System","authorKey":"official:en","type":"official","statementKey":"en","lang":"en","langDisplay":"English","official":true,"mainOfficial":false,"publicVisible":true,"remarks":"Initialization."},{"key":442690978198914,"updateDate":"2026-07-30","version":1785425046000,"author":"zhangsiqi_7559","authorKey":"user:1186008","authorUserId":1186008,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/777513f8452a944fe4049520f83ba72d?d\u003drobohash","remarks":"Forked from System\u0027s version (2026-07-29)"},{"key":440241757798794,"updateDate":"2026-07-21","version":1784624065000,"author":"GPT","authorKey":"translator:1281309:kk","authorUserId":1281309,"type":"translator","statementKey":"kk","lang":"kk","langDisplay":"Қазақ тілі","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"Translated by gpt-4.1-mini"},{"key":440629314022633,"updateDate":"2026-07-15","version":1784088010000,"author":"GPT","authorKey":"translator:1281309:it","authorUserId":1281309,"type":"translator","statementKey":"it","lang":"it","langDisplay":"Italiano","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"Translated by gpt-4.1-mini"},{"key":447127177774170,"updateDate":"2026-07-06","version":1783298371000,"author":"george0101","authorKey":"user:1036463","authorUserId":1036463,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/f613f53b9bd0a4be464ecb0dfacef0b7?d\u003drobohash","remarks":"Forked from System\u0027s version (2026-06-13)"},{"key":447125005803548,"updateDate":"2026-07-02","version":1782978868000,"author":"shentianixng","authorKey":"user:1149978","authorUserId":1149978,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/c79d8984f5b3972c192a6ad9b6d1c047?d\u003dretro","remarks":"1111111111111111"},{"key":447255395002329,"updateDate":"2026-06-20","version":1781922910000,"author":"Horch_Wang","authorKey":"user:1053772","authorUserId":1053772,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/8f67af9a0600ae1f40ef584490c609cb?d\u003didenticon","remarks":"Forked from george0101\u0027s version (2026-06-13)"},{"key":449059227640913,"updateDate":"2026-05-25","version":1779697714000,"author":"SJY_125","authorKey":"user:1160699","authorUserId":1160699,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/e38b386ae4e24c5bdc10daa68f3b87aa?d\u003dwavatar","remarks":"Forked from System\u0027s version (2026-05-07)"},{"key":449034715154358,"updateDate":"2026-05-08","version":1778246414000,"author":"tom023","authorKey":"user:1276687","authorUserId":1276687,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1276687?v\u003d1784951377","remarks":"Forked from System\u0027s version (2026-05-07)"},{"key":454604742807600,"updateDate":"2026-03-10","version":1773147794000,"author":"Segment_Tree_","authorKey":"user:801748","authorUserId":801748,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/c8063f97ab3a64e10974c55a48d24de3?d\u003dretro","remarks":"Forked from System Crawler\u0027s version (2026-02-27)"},{"key":454000198065833,"updateDate":"2026-03-09","version":1773068174000,"author":"politetrex","authorKey":"user:1250869","authorUserId":1250869,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1250869?v\u003d1767614943","remarks":"Forked from zypressen\u0027s version (2023-01-10)"},{"key":454100349072052,"updateDate":"2026-02-27","version":1772158679000,"author":"zhangxiaorui123","authorKey":"user:1164549","authorUserId":1164549,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/9929305047499e79a4ac682f08a4ba05?d\u003dretro","remarks":"Forked from Mang33038\u0027s version (2026-01-07)"},{"key":454189998539524,"updateDate":"2026-02-26","version":1772105456000,"author":"cuolema","authorKey":"user:1162455","authorUserId":1162455,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/e65b4fbf0010a73dedcef902f396b599?d\u003dwavatar","remarks":"Forked from Mang33038\u0027s version (2026-01-07)"},{"key":400131131113003,"updateDate":"2026-01-07","version":1767785956000,"author":"Mang33038","authorKey":"user:1158601","authorUserId":1158601,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1158601?v\u003d1782453379","remarks":"Forked from System Crawler\u0027s version (2026-01-02)"},{"key":393635597049301,"updateDate":"2025-11-25","version":1764063305000,"author":"TangTang_","authorKey":"user:1120231","authorUserId":1120231,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1120231?v\u003d1743073158","remarks":"Forked from WjhisTyAhzh\u0027s version (2025-10-22)"},{"key":392913849872726,"updateDate":"2025-10-23","version":1761166247000,"author":"XGTD","authorKey":"user:657931","authorUserId":657931,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/aeddf698683acc785b11ad7cbcd1479e?d\u003drobohash","remarks":"Forked from System Crawler\u0027s version (2025-10-22)"},{"key":392978949334323,"updateDate":"2025-10-22","version":1761112314000,"author":"WjhisTyAhzh","authorKey":"user:977339","authorUserId":977339,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/977339?v\u003d1725336661","remarks":"Forked from shepherdtoherd\u0027s version (2025-08-12)"},{"key":398471420016469,"updateDate":"2025-10-10","version":1760065553000,"author":"Juruo_txt","authorKey":"user:798274","authorUserId":798274,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/583f8c1a27cfce60abb20f1251db8b41?d\u003didenticon","remarks":"Juruotxt"},{"key":398522790462908,"updateDate":"2025-10-09","version":1759995046000,"author":"sunjincheng","authorKey":"user:1009121","authorUserId":1009121,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/8383b7f7122f1100fcf05812a91746cd?d\u003dwavatar","remarks":"Forked from cgy20140502\u0027s version (2025-10-08)"},{"key":398554005243110,"updateDate":"2025-10-08","version":1759924052000,"author":"cgy20140502","authorKey":"user:1204253","authorUserId":1204253,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1204253?v\u003d1784943982","remarks":"Forked from calgary\u0027s version (2025-09-03)"},{"key":396877153754694,"updateDate":"2025-09-03","version":1756877996000,"author":"calgary","authorKey":"user:1184711","authorUserId":1184711,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/f07d35d192e3168164797d66e415211b?d\u003dmonsterid","remarks":""},{"key":403546794641828,"updateDate":"2025-08-28","version":1756349745000,"author":"gongchenli0717","authorKey":"user:911211","authorUserId":911211,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/911211?v\u003d1756180486","remarks":"A + B Problem Hard version (2025-08-08)"},{"key":403547171925862,"updateDate":"2025-08-13","version":1755082341000,"author":"yuhong056","authorKey":"user:1001029","authorUserId":1001029,"type":"user","lang":"de","langDisplay":"Deutsch","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/49d54ef84ace80157a82197e3906e85d?d\u003didenticon","remarks":"A+B problem(Hard version)"},{"key":403095998420686,"updateDate":"2025-08-12","version":1755002005000,"author":"shepherdtoherd","authorKey":"user:988836","authorUserId":988836,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/988836?v\u003d1728383436","remarks":"Forked from heyixuan0201\u0027s version (2025-08-08)"},{"key":403547377276933,"updateDate":"2025-08-08","version":1754630624000,"author":"heyixuan0201","authorKey":"user:803170","authorUserId":803170,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/803170?v\u003d1785477725","remarks":""},{"key":403653625770960,"updateDate":"2025-08-07","version":1754546824000,"author":"wuwenbo0510","authorKey":"user:1041504","authorUserId":1041504,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/0c6c1c2f5b843d97fec166e4a5a313ea?d\u003dretro","remarks":"Forked from System Crawler\u0027s version (2025-08-04)"},{"key":400655575550666,"updateDate":"2025-07-31","version":1753945854000,"author":"DeepSeek","authorKey":"translator:1281311:ko","authorUserId":1281311,"type":"translator","statementKey":"ko","lang":"ko","langDisplay":"한국어","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/a34f8923c2662b4ba8d1d53b114ca371?d\u003drobohash","remarks":"[한국어] translation by LLM (deepseek-chat)"},{"key":401823888754816,"updateDate":"2025-07-21","version":1753095384000,"author":"123456Zhe","authorKey":"user:1160317","authorUserId":1160317,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1160317?v\u003d1753010197","remarks":"Forked from zsl18931891335\u0027s version (2025-03-08)"},{"key":402108457385145,"updateDate":"2025-07-13","version":1752412017000,"author":"chen_yu_hang","authorKey":"user:955616","authorUserId":955616,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/955616?v\u003d1775270671","remarks":"Forked from System Crawler\u0027s version (2025-07-12)"},{"key":407175257968690,"updateDate":"2025-07-11","version":1752233845000,"author":"xiaruochen","authorKey":"user:1092590","authorUserId":1092590,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/e7644681bd1339b74272139fb1d5849d?d\u003didenticon","remarks":"Forked from System Crawler\u0027s version (2025-07-11)"},{"key":407360903271409,"updateDate":"2025-07-10","version":1752120131000,"author":"CharwingHawk","authorKey":"user:913037","authorUserId":913037,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/913037?v\u003d1720924410","remarks":"Forked from System Crawler\u0027s version (2025-07-07)"},{"key":412961491212859,"updateDate":"2025-06-02","version":1748853995000,"author":"DeepSeek","authorKey":"translator:1281311:en","authorUserId":1281311,"type":"translator","statementKey":"en","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/a34f8923c2662b4ba8d1d53b114ca371?d\u003drobohash","remarks":"[English] translation by LLM (deepseek-chat)"},{"key":410629898253950,"updateDate":"2025-06-01","version":1748766417000,"author":"ybc2027sty","authorKey":"user:941298","authorUserId":941298,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/38363382a718c09e441bc8c87a949f2b?d\u003drobohash","remarks":"Forked from System Crawler\u0027s version (2025-03-20)"},{"key":406674454158122,"updateDate":"2025-05-14","version":1747212834000,"author":"LunaFromStarry","authorKey":"user:933748","authorUserId":933748,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/933748?v\u003d1786696046","remarks":"Forked from dtxhs\u0027s version (2025-03-24)"},{"key":410450404196963,"updateDate":"2025-03-24","version":1742821655000,"author":"20121028LRR","authorKey":"user:965959","authorUserId":965959,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/c1dd4e2cd69fe0d040d3bbc2c89db783?d\u003didenticon","remarks":"Forked from GPT_ru\u0027s version (2024-04-08)"},{"key":410269285176688,"updateDate":"2025-03-18","version":1742292117000,"author":"123jyy123","authorKey":"user:1050076","authorUserId":1050076,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1050076?v\u003d1749557275","remarks":"Forked from System Crawler\u0027s version (2025-03-14)"},{"key":410873845326299,"updateDate":"2025-03-08","version":1741399474000,"author":"zsl18931891335","authorKey":"user:871090","authorUserId":871090,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/a889b8cbec45611558e8712bb8f67b1d?d\u003didenticon","remarks":"Forked from System Crawler\u0027s version (2025-03-07)"},{"key":414764300754617,"updateDate":"2025-01-07","version":1736236610000,"author":"RiceQuakes","authorKey":"user:851328","authorUserId":851328,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/851328?v\u003d1736312229","remarks":"Forked from 765490529\u0027s version (2022-04-18)"},{"key":377418042279870,"updateDate":"2024-12-27","version":1735289922000,"author":"GPT","authorKey":"translator:1281309:en","authorUserId":1281309,"type":"translator","statementKey":"en","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[English] translation by OpenAI (gpt-4o-mini-2024-07-18)"},{"key":420363714524604,"updateDate":"2024-12-24","version":1735039079000,"author":"lby_commandBlock","authorKey":"user:982364","authorUserId":982364,"type":"user","lang":"en","langDisplay":"English","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/982364?v\u003d1747134266","remarks":"Forked from System Crawler\u0027s version (2024-12-24)"},{"key":421432071724142,"updateDate":"2024-12-07","version":1733576676000,"author":"GPT","authorKey":"translator:1281309:id","authorUserId":1281309,"type":"translator","statementKey":"id","lang":"id","langDisplay":"Bahasa Indonesia","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[Bahasa Indonesia] translation by OpenAI (gpt-4o-mini-2024-07-18)"},{"key":418212230996284,"updateDate":"2024-11-22","version":1732245567000,"author":"GPT","authorKey":"translator:1281309:ko","authorUserId":1281309,"type":"translator","statementKey":"ko","lang":"ko","langDisplay":"한국어","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[한국어] translation by OpenAI (gpt-4o-mini-2024-07-18)"},{"key":352343011049513,"updateDate":"2024-10-08","version":1728368917000,"author":"Zaoly","authorKey":"user:694988","authorUserId":694988,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/694988?v\u003d1666588859","remarks":"Forked from System Crawler\u0027s version (2024-10-07)"},{"key":353360096585947,"updateDate":"2024-09-24","version":1727171542000,"author":"Kelvin_Liu","authorKey":"user:215626","authorUserId":215626,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/289297f86f58ae0085f6b1cba1d768b2?d\u003didenticon","remarks":"Forked from System Crawler\u0027s version (2024-09-20)"},{"key":357928326763094,"updateDate":"2024-07-19","version":1721371137000,"author":"gdlittleyi","authorKey":"user:957777","authorUserId":957777,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/71202cdd19bfcafbbf97494b8dfe666b?d\u003dmonsterid","remarks":"Forked from cjj490168650\u0027s version (2022-06-30)"},{"key":376367546015618,"updateDate":"2024-04-08","version":1712565464000,"author":"GPT","authorKey":"translator:1281309:ar","authorUserId":1281309,"type":"translator","statementKey":"ar","lang":"ar","langDisplay":"اَلْعَرَبِيَّةُ","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[اَلْعَرَبِيَّةُ] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":376350949322467,"updateDate":"2024-04-08","version":1712565459000,"author":"GPT","authorKey":"translator:1281309:vi","authorUserId":1281309,"type":"translator","statementKey":"vi","lang":"vi","langDisplay":"Tiếng Việt","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[Tiếng Việt] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":376846959135286,"updateDate":"2024-04-08","version":1712565453000,"author":"GPT","authorKey":"translator:1281309:ru","authorUserId":1281309,"type":"translator","statementKey":"ru","lang":"ru","langDisplay":"русский язык","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[русский язык] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":376367751909153,"updateDate":"2024-04-08","version":1712565452000,"author":"GPT","authorKey":"translator:1281309:pt","authorUserId":1281309,"type":"translator","statementKey":"pt","lang":"pt","langDisplay":"português","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[português] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":376351785712956,"updateDate":"2024-04-08","version":1712565452000,"author":"GPT","authorKey":"translator:1281309:ja","authorUserId":1281309,"type":"translator","statementKey":"ja","lang":"ja","langDisplay":"日本語","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[日本語] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":374336047050231,"updateDate":"2024-04-08","version":1712565452000,"author":"GPT","authorKey":"translator:1281309:es","authorUserId":1281309,"type":"translator","statementKey":"es","lang":"es","langDisplay":"Español","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/1281309","remarks":"[Español] translation by OpenAI (gpt-3.5-turbo-0125)"},{"key":366717517465394,"updateDate":"2024-03-23","version":1711182116000,"author":"hhc0716","authorKey":"user:659569","authorUserId":659569,"type":"user","lang":"ar","langDisplay":"اَلْعَرَبِيَّةُ","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/659569?v\u003d1703568903","remarks":"Forked from GPT_ar\u0027s version (2023-12-26)"},{"key":372164465083309,"updateDate":"2024-03-15","version":1710432358000,"author":"Haneochi","authorKey":"user:690522","authorUserId":690522,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/690522?v\u003d1760675929","remarks":"Forked from System Crawler\u0027s version (2024-03-14)"},{"key":372560105953139,"updateDate":"2024-03-09","version":1709974939000,"author":"liyifan202201","authorKey":"user:873166","authorUserId":873166,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/873166?v\u003d1723260075","remarks":"Forked from System Crawler\u0027s version (2024-03-07)"},{"key":373331212963828,"updateDate":"2024-02-18","version":1708260383000,"author":"2020212205055","authorKey":"user:704136","authorUserId":704136,"type":"user","lang":"de","langDisplay":"Deutsch","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/704136?v\u003d1671977966","remarks":"Forked from System Crawler\u0027s version (2024-02-15)"},{"key":369680604571093,"updateDate":"2024-02-01","version":1706792252000,"author":"changwenxuan","authorKey":"user:704673","authorUserId":704673,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/704673?v\u003d1681313568","remarks":"Forked from System Crawler\u0027s version (2024-02-01)"},{"key":374878339075715,"updateDate":"2023-11-03","version":1699000985000,"author":"rrt517","authorKey":"user:705966","authorUserId":705966,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/705966?v\u003d1680420082","remarks":"Forked from HashBuke\u0027s version (2023-10-22)"},{"key":374507166420099,"updateDate":"2023-10-22","version":1697969069000,"author":"HashBuke","authorKey":"user:697421","authorUserId":697421,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/697421?v\u003d1666883143","remarks":"Forked from System Crawler\u0027s version (2023-10-16)"},{"key":380771585620245,"updateDate":"2023-10-05","version":1696498398000,"author":"maburb","authorKey":"user:678668","authorUserId":678668,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/b5ded5a5592390da5160e6d44f1ffd8a?d\u003drobohash","remarks":"Forked from System Crawler\u0027s version (2023-10-02)"},{"key":380962538806923,"updateDate":"2023-09-28","version":1695910398000,"author":"XuX","authorKey":"user:561845","authorUserId":561845,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/def972ec445616c3eae03a0727354ade?d\u003dwavatar","remarks":"Forked from System Crawler\u0027s version (2023-09-25)"},{"key":380518196014451,"updateDate":"2023-09-25","version":1695637980000,"author":"chfychin","authorKey":"user:702903","authorUserId":702903,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/da56948c87a0c5da42eb3827594dd908?d\u003dretro","remarks":"Forked from xb1123\u0027s version (2023-08-23)"},{"key":379091044843844,"updateDate":"2023-08-23","version":1692772676000,"author":"xb1123","authorKey":"user:800989","authorUserId":800989,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/800989?v\u003d1691583566","remarks":"Forked from System Crawler\u0027s version (2023-08-02)"},{"key":386521909539025,"updateDate":"2023-02-13","version":1676276922000,"author":"x2215108586","authorKey":"user:598536","authorUserId":598536,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/ee9b0ba5869505d5aebd43d4da3d7e5b?d\u003dretro","remarks":"Forked from System Crawler\u0027s version (2023-02-12)"},{"key":382779464904943,"updateDate":"2023-01-10","version":1673336098000,"author":"zypressen","authorKey":"user:723597","authorUserId":723597,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cdn.vjudge.net.cn/user/avatar/723597?v\u003d1673076104","remarks":"Forked from System Crawler\u0027s version (2023-01-06)"},{"key":384794891624319,"updateDate":"2022-11-23","version":1669205522000,"author":"the_same_praying","authorKey":"user:711098","authorUserId":711098,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/952497c7aa2c98851c063db91ac510b8?d\u003didenticon","remarks":"Forked from wangyaozhong\u0027s version (2022-11-23)"},{"key":384799021217709,"updateDate":"2022-11-23","version":1669197002000,"author":"SKTTIFAKER","authorKey":"user:672910","authorUserId":672910,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/952497c7aa2c98851c063db91ac510b8?d\u003didenticon","remarks":"Forked from cjj490168650\u0027s version (2022-06-30)"},{"key":384801081226281,"updateDate":"2022-11-23","version":1669195466000,"author":"wangyaozhong","authorKey":"user:704115","authorUserId":704115,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/952497c7aa2c98851c063db91ac510b8?d\u003didenticon","remarks":"Forked from cjj490168650\u0027s version (2022-06-30)"},{"key":318960785920698,"updateDate":"2022-10-29","version":1667022495000,"author":"yumenghao123","authorKey":"user:469743","authorUserId":469743,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/f88d12bc1cde6c9932f205158460e618?d\u003didenticon","remarks":"Forked from System Crawler\u0027s version (2022-10-23)"},{"key":319446769997481,"updateDate":"2022-10-09","version":1665274245000,"author":"PLA_Nh","authorKey":"user:461055","authorUserId":461055,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/d5c4a7cbc851c330ec8e4e7c61d4e47d?d\u003drobohash","remarks":"Forked from System Crawler\u0027s version (2022-10-09)"},{"key":317383080844034,"updateDate":"2022-06-30","version":1656578329000,"author":"cjj490168650","authorKey":"user:94626","authorUserId":94626,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/e1012892257352dd99bbe2297d024e8b?d\u003dretro","remarks":"洛谷账号绑定教程"},{"key":325173959433012,"updateDate":"2022-04-18","version":1650289134000,"author":"765490529","authorKey":"user:507444","authorUserId":507444,"type":"user","lang":"zh","langDisplay":"中文","official":false,"mainOfficial":false,"publicVisible":true,"avatarUrl":"https://cn.cravatar.com/avatar/81357435ea488d7eb594fcd1ebc4c1f0?d\u003didenticon","remarks":"Forked from System Crawler\u0027s version (2022-04-17)"}],"properties":[{"title":"time_limit","content":"1000 ms","spoiler":false},{"title":"mem_limit","content":"524288 kB","spoiler":false},{"title":"author","content":"\u003ca href\u003d\u0027https://www.luogu.com.cn/user/3\u0027 target\u003d\u0027_blank\u0027\u003e洛谷\u003c/a\u003e","spoiler":true},{"title":"tags","content":"模拟","spoiler":true},{"title":"difficulty","content":"入门","spoiler":true}],"submitMethods":[false,true,true],"status":0,"statistics":[["users","\u003cspan title\u003d\u0027Local\u0027\u003e12510 / 13070\u003c/span\u003e"],["","\u003cspan title\u003d\u0027Remote\u0027\u003e1240703 / ?\u003c/span\u003e"],["submissions","\u003cspan title\u003d\u0027Remote\u0027\u003e1240703 / 2147562\u003c/span\u003e"]],"username":"huzhaoxiang","mySols":[]}</textarea>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="body-footer">
+    <div style="margin-bottom: 8px">
+        <a href="/cdn-cgi/l/email-protection#056c762b706b4574742b666a68" target="_blank">
+            <img src="/static/bundle/159d24b1b159c99a98e3.svg"/>
+        </a>
+        <img src="/static/bundle/fdbb90aaddd32a5ab4ad.png" class="qq" data-bs-toggle="popover" data-bs-placement="top"/>
+        <a href="https://weibo.com/u/5340553087" target="_blank">
+            <img src="/static/bundle/aae271671b3d18e15b40.svg"/>
+        </a>
+        <a href="https://space.bilibili.com/3056509/lists/3909505" target="_blank">
+            <img src="/static/bundle/ad1d62977bf56d0e0010.png"/>
+        </a>
+        <a href="https://t.me/joinchat/Erw7nRGwXN3iSCoKguVW3w" target="_blank">
+            <img src="/static/bundle/7182da66feaf3e99632a.svg"/>
+        </a>
+        <a href="https://www.facebook.com/virtualjudge/" target="_blank">
+            <img src="/static/bundle/c2687d1cf1f3e06984eb.svg"/>
+        </a>
+    </div>
+    <div id="footer-info">
+        All Copyright Reserved © 2010-2026<br/>
+        <span data-i18n="bottom.server_time"></span>: <span class="currentTimeTZ"></span>
+    </div>
+</div>
+
+
+<input name="systemVersion" type="hidden" value="1786759874582"/>
+<input name="gaId" type="hidden" value="G-374JLX1715"/>
+
+    <input id="visitor_username" name="username" type="hidden" value="huzhaoxiang"/>
+    <input id="visitor_userId" name="userId" type="hidden" value="1306140"/>
+    <input id="visitor_sup" name="sup" type="hidden" value="0"/>
+    <input id="newMessage" name="newMessage" type="hidden" value="false"/>
+
+
+
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">basePath = "";</script>
+
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b4ccb9ccfc19db',t:'MTc4Njc2MTI2MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
